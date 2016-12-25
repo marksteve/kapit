@@ -1,0 +1,45 @@
+<!doctype html>
+<head>
+  <title>Kapit</title>
+  <link rel="stylesheet" href="./css/app.css">
+<body>
+  <main>
+    <h1>Kapit</h1>
+    <p>CCM Routes Library</p>
+    <p><button>Login with Facebook</button></p>
+    <p><button>Submit a route</button></p>
+    <p class="choices">
+      <label>
+        <input name="route_type" type="radio" value="top_rope">
+        <span>Top rope</span>
+      </label>
+      <label>
+        <input name="route_type" type="radio" value="lead">
+        <span>Lead</span>
+      </label>
+      <label>
+        <input name="route_type" type="radio" value="boulder">
+        <span>Boulder</span>
+      </label>
+    </p>
+    <p class="upload">
+      <label>
+        <input type="file">
+        <span>Upload route photo</span>
+      </label>
+    </p>
+    <canvas id="app"></canvas>
+    <p><small>Tip: You can draw arrows on the photo.</small></p>
+    <p><button>Continue</button></p>
+    <p>
+      Name (optional)
+      <input type="text">
+    </p>
+    <p>
+      Description (optional)
+      <textarea rows="5"></textarea>
+    </p>
+    <p><button>Submit route</button></p>
+  </main>
+  <script type="text/javascript" src="./js/paper-full.js"></script>
+  <script type="text/paperscript" src="./js/app.js" canvas="app"></script>

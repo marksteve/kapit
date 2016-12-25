@@ -1,0 +1,79 @@
+body {
+  background: #333;
+  margin: 0;
+}
+
+body, input, textarea, button {
+  font: 32px/1.5 sans-serif;
+}
+
+h1, h2, h3, h4, p, canvas { margin: 0 0 1.5em; }
+h1 { font-size: 2.252em; margin-bottom: 0; }
+h2 { font-size: 1.838em; }
+h3 { font-size: 1.501em; }
+h4 { font-size: 1.225em; }
+small { font-size: 0.816em; }
+
+input, textarea {
+  box-sizing: border-box;
+  padding: 0.375em;
+  width: 100%;
+  border: 0.1em solid;
+}
+
+button {
+  border: 0;
+  background: dodgerblue;
+  color: white;
+  padding: 0 0.375em;
+  cursor: pointer;
+}
+
+main {
+  box-sizing: border-box;
+  max-width: 40rem;
+  padding: 1.5em;
+  margin: 0 auto;
+  background: white;
+}
+
+canvas {
+  background: white;
+  width: 480px;
+  height: 640px;
+  border: 0.1em solid;
+  display: block;
+}
+
+.choices > label { display: block}
+.choices > label > input[type=radio] { display: none; }
+.choices > label > input[type=radio] + span::before {
+  box-sizing: border-box;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  display: inline-block;
+  content: ' ';
+  border: 0.1em solid;
+  vertical-align: -0.2em;
+  border-radius: 50%;
+  margin-right: .5em;
+}
+.choices > label > input[type=radio]:checked + span::before {
+  content: '\01F44D';
+  border: 0;
+  vertical-align: middle;
+}
+.choices > label > input[type=radio] + span {
+  vertical-align: middle;
+}
+
+.upload > label { display: block; }
+.upload > label > input[type=file] { display: none; }
+.upload > label > span {
+  display: inline-block;
+  background: dodgerblue;
+  color: white;
+  padding: 0 0.375em;
+  cursor: pointer;
+}
