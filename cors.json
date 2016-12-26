@@ -1,0 +1,7 @@
+[
+  {
+    "origin": ["http://localhost:9968", "https://marksteve.com"],
+    "method": ["GET"],
+    "maxAgeSeconds": 3600
+  }
+]

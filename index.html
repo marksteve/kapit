@@ -1,45 +1,100 @@
 <!doctype html>
+
 <head>
   <title>Kapit</title>
   <link rel="stylesheet" href="./css/app.css">
+
 <body>
-  <main>
-    <h1>Kapit</h1>
-    <p>CCM Routes Library</p>
-    <p><button>Login with Facebook</button></p>
-    <p><button>Submit a route</button></p>
-    <p class="choices">
-      <label>
-        <input name="route_type" type="radio" value="top_rope">
-        <span>Top rope</span>
-      </label>
-      <label>
-        <input name="route_type" type="radio" value="lead">
-        <span>Lead</span>
-      </label>
-      <label>
-        <input name="route_type" type="radio" value="boulder">
-        <span>Boulder</span>
-      </label>
+  <main id="app">
+    <h1><router-link to="/">Kapit</router-link></h1>
+    <p>Indoor Climbing Routes Library</p>
+    <div v-if="user" class="user">
+      <div class="avatar"><img :src="user.photoURL"></div>
+      <small>
+        Logged in as <strong>{{ user.displayName }}</strong>
+        &mdash; <a href="#" @click="logout">Logout</a>
+      </small>
+    </div>
+    <p v-else>
+      <button @click="login">Login with Facebook</button>
     </p>
-    <p class="upload">
-      <label>
-        <input type="file">
-        <span>Upload route photo</span>
-      </label>
-    </p>
-    <canvas id="photo"></canvas>
-    <p><small>Tip: You can draw arrows on the photo.</small></p>
-    <p><button>Continue</button></p>
-    <p>
-      Name (optional)
-      <input type="text">
-    </p>
-    <p>
-      Description (optional)
-      <textarea rows="5"></textarea>
-    </p>
-    <p><button>Submit route</button></p>
+    <router-view :user="user"></router-view>
   </main>
+
+  <script id="index" type="text/x-template">
+    <div class="index">
+      <p>
+        <router-link v-if="user" class="btn" to="/submit">Submit a route</router-link>
+      </p>
+    </div>
+  </script>
+
+  <script id="submit" type="text/x-template">
+    <div class="submit">
+      <h2>Submit a route</h2>
+      <div v-if="step === 'selectRouteType'">
+        <p class="choices">
+          <strong>Route type</strong>
+          <label>
+            <input v-model="routeType" type="radio" value="topRope">
+            <span>Top rope</span>
+          </label>
+          <label>
+            <input v-model="routeType" type="radio" value="lead">
+            <span>Lead</span>
+          </label>
+          <label>
+            <input v-model="routeType" type="radio" value="boulder">
+            <span>Boulder</span>
+          </label>
+        </p>
+        <p v-if="gradingChoices" class="choices">
+          <strong>Grading system</strong>
+          <label v-for="grading in gradingChoices">
+            <input v-model="routeGrading" type="radio" :value="grading.id">
+            <span>{{ grading.name }}</span>
+          </label>
+        </p>
+        <p v-if="gradeChoices" class="choices">
+          <strong>Grade</strong>
+          <select v-model="routeGrade">
+            <option v-for="grade in gradeChoices" :value="grade">{{ grade }}</option>
+          </select>
+        </p>
+        <p class="upload">
+          <label>
+            <input type="file" :disabled="!routeType" @change="uploadPhoto">
+            <span>Upload route photo</span>
+          </label>
+        </p>
+      </div>
+      <div v-else-if="step === 'editPhoto'">
+        <p class="tip">
+          <small>You can optionally make markings on the route photo to identify holds and features.</small>
+        </p>
+        <paper :url="routePhoto" ref="canvas"></paper>
+        <p><button @click="savePhoto">Save photo</button></p>
+      </div>
+      <div v-else-if="step === 'submitRoute'">
+        <p>
+          Name (optional)
+          <input v-model="routeName" type="text">
+        </p>
+        <p>
+          Description (optional)
+          <textarea v-model="routeDescription" rows="5"></textarea>
+        </p>
+        <p><button @click="submitRoute">Submit route</button></p>
+      </div>
+    </div>
+  </script>
+
+  <script src="//unpkg.com/vue/dist/vue.js"></script>
+  <script src="//unpkg.com/vue-router/dist/vue-router.js"></script>
+  <script src="//www.gstatic.com/firebasejs/3.6.4/firebase-app.js"></script>
+  <script src="//www.gstatic.com/firebasejs/3.6.4/firebase-auth.js"></script>
+  <script src="//www.gstatic.com/firebasejs/3.6.4/firebase-database.js"></script>
+  <script src="//www.gstatic.com/firebasejs/3.6.4/firebase-storage.js"></script>
   <script src="./js/paper-full.js"></script>
   <script src="./js/app.js"></script>
+
