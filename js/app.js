@@ -89,6 +89,7 @@ var Submit = {
     return {
       step: 'selectRouteType',
       routeKey: null,
+      routeGym: null,
       routeType: null,
       routeGrading: null,
       routeGrade: null,
@@ -98,6 +99,14 @@ var Submit = {
     }
   },
   computed: {
+    gymChoices: function () {
+      return [
+        { id: 'ts', name: 'Power Up Tandang Sora' },
+        { id: 'centro', name: 'Power Up Centro Atletico' },
+        { id: 'rox', name: 'Power Up ROX' },
+        { id: 'ccm', name: 'Climb Central Manila' }
+      ]
+    },
     climbType: function () {
       return this.routeType === 'boulder'
         ? 'bouldering'
@@ -162,14 +171,19 @@ var Submit = {
       })
     },
     submitRoute () {
-      firebase.database().ref('routes/' + this.user.uid + '/' + this.routeKey).set({
+      var routeData = {
+        gym: this.routeGym,
         type: this.routeType,
         grading: this.routeGrading,
         grade: this.routeGrade,
         photo: this.routePhoto,
         name: this.routeName,
         description: this.routeDescription
-      })
+      }
+      var updates = {}
+      updates['userRoutes/' + this.user.uid + '/' + this.routeKey] = routeData
+      updates['routes/' + this.routeKey] = routeData
+      firebase.database().ref().update(updates)
     }
   }
 }

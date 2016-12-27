@@ -34,6 +34,12 @@
       <h2>Submit a route</h2>
       <div v-if="step === 'selectRouteType'">
         <p class="choices">
+          <strong>Gym</strong>
+          <select v-model="routeGym">
+            <option v-for="gym in gymChoices" :value="gym.id">{{ gym.name }}</option>
+          </select>
+        </p>
+        <p class="choices">
           <strong>Route type</strong>
           <label>
             <input v-model="routeType" type="radio" value="topRope">
