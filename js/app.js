@@ -220,7 +220,7 @@ function initApp () {
     { path: '/', component: Index },
     { path: '/submit', component: Submit }
   ]
-  var router = new VueRouter({ routes: routes })
+  var router = new VueRouter({ mode: 'history', routes: routes })
 
   var app = new Vue({
     router: router,
