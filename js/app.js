@@ -3,9 +3,30 @@ var VueRouter = window.VueRouter
 var firebase = window.firebase
 var paper = window.paper
 
+var firebaseConfig = {
+  apiKey: 'AIzaSyDV8Dm_puLyulsAUCmkLQgWf_L9GIQ1A_s',
+  authDomain: 'kapit-f853c.firebaseapp.com',
+  databaseURL: 'https://kapit-f853c.firebaseio.com',
+  storageBucket: 'kapit-f853c.appspot.com',
+  messagingSenderId: '29870477641'
+}
+firebase.initializeApp(firebaseConfig)
+var database = firebase.database()
+var storage = firebase.storage()
+
 var Index = {
   template: '#index',
-  props: ['user']
+  props: ['user'],
+  firebase: {
+    _routes: database.ref('routes')
+      .orderByChild('submittedAt')
+      .limitToLast(50)
+  },
+  computed: {
+    routes: function () {
+      return this._routes.slice().reverse()
+    }
+  }
 }
 
 Vue.component('paper', {
@@ -131,10 +152,10 @@ var Submit = {
   },
   methods: {
     uploadPhoto: function (e) {
-      this.routeKey = firebase.database().ref('routes/' + this.user.uid).push().key
+      this.routeKey = database.ref('routes/' + this.user.uid).push().key
 
       var file = e.target.files[0]
-      var routeImages = firebase.storage().ref('routeImages/' + file.name)
+      var routeImages = storage.ref('routeImages/' + file.name)
       var uploadTask = routeImages.put(file)
       var self = this
       uploadTask.on(
@@ -154,7 +175,7 @@ var Submit = {
       // TODO: Check if there were changes made to avoid re-uploading
       var self = this
       this.$refs.canvas.$el.toBlob(function (blob) {
-        var editedImages = firebase.storage().ref('editedImages/' + self.routeKey + '.png')
+        var editedImages = storage.ref('editedImages/' + self.routeKey + '.png')
         var uploadTask = editedImages.put(blob)
         uploadTask.on(
           firebase.storage.TaskEvent.STATE_CHANGED,
@@ -178,25 +199,20 @@ var Submit = {
         grade: this.routeGrade,
         photo: this.routePhoto,
         name: this.routeName,
-        description: this.routeDescription
+        description: this.routeDescription,
+        submittedAt: firebase.database.ServerValue.TIMESTAMP,
+        user: {
+          uid: this.user.uid,
+          displayName: this.user.displayName,
+          photoURL: this.user.photoURL
+        }
       }
       var updates = {}
       updates['userRoutes/' + this.user.uid + '/' + this.routeKey] = routeData
       updates['routes/' + this.routeKey] = routeData
-      firebase.database().ref().update(updates)
+      database.ref().update(updates)
     }
   }
-}
-
-function initFirebase () {
-  var config = {
-    apiKey: 'AIzaSyDV8Dm_puLyulsAUCmkLQgWf_L9GIQ1A_s',
-    authDomain: 'kapit-f853c.firebaseapp.com',
-    databaseURL: 'https://kapit-f853c.firebaseio.com',
-    storageBucket: 'kapit-f853c.appspot.com',
-    messagingSenderId: '29870477641'
-  }
-  firebase.initializeApp(config)
 }
 
 function initApp () {
@@ -221,7 +237,6 @@ function initApp () {
     }
   }).$mount('#app')
 
-  initFirebase()
   firebase.auth().onAuthStateChanged(function (user) {
     app.user = user
   })

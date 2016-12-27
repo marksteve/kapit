@@ -48,6 +48,49 @@ h1 > a {
   text-decoration: none;
 }
 
+/* Index */
+
+.index {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.index > h2 {
+  flex: auto;
+  margin: 0;
+}
+
+.routes {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+}
+
+.route {
+  display: flex;
+  align-items: center;
+}
+
+.route > .gym {
+  text-transform: uppercase;
+  font-size: small;
+  display: inline-block;
+  color: white;
+  width: 5em;
+  margin-right: 1em;
+  text-align: center;
+}
+
+.route > .name { flex: auto; }
+
+.route > .gym.ts { background: gold; }
+.route > .gym.centro { background: gold; }
+.route > .gym.rox { background: gold; }
+.route > .gym.ccm { background: orangered; }
+
+/* Submit */
+
 .user {
   background: lemonchiffon;
   margin-bottom: 1.5rem;
