@@ -48,6 +48,10 @@ h1 > a {
   text-decoration: none;
 }
 
+.photo > img {
+  width: 100%;
+}
+
 /* Index */
 
 .index {
@@ -67,14 +71,21 @@ h1 > a {
   padding: 0;
 }
 
-.route {
+.routes > li {
   display: flex;
   align-items: center;
 }
 
-.route > .gym {
+.routes > li > .grade { font-size: 0.816em; }
+
+.routes > li > .type {
+  height: 1em;
+  margin-left: 0.5em;
+}
+
+.routes > li > .gym {
   text-transform: uppercase;
-  font-size: small;
+  font-size: 0.816em;
   display: inline-block;
   color: white;
   width: 5em;
@@ -82,12 +93,12 @@ h1 > a {
   text-align: center;
 }
 
-.route > .name { flex: auto; }
+.routes > li > .gym.ts { background: gold; }
+.routes > li > .gym.centro { background: gold; }
+.routes > li > .gym.rox { background: gold; }
+.routes > li > .gym.ccm { background: orangered; }
 
-.route > .gym.ts { background: gold; }
-.route > .gym.centro { background: gold; }
-.route > .gym.rox { background: gold; }
-.route > .gym.ccm { background: orangered; }
+.routes > li > .name { flex: auto; }
 
 /* Submit */
 
@@ -152,7 +163,27 @@ h1 > a {
 
 .tip { line-height: 1; }
 
-canvas {
-  border: 0.1em solid;
-  display: block;
+canvas { display: block; }
+
+/* Route */
+
+.route > .name,
+.route > .meta {
+  display: flex;
+  align-items: center;
+}
+
+.route > .name > h2 {
+  flex: auto;
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+.route > .name > .type {
+  height: 1.5em;
+  margin-left: 0.5em;
+}
+
+.route > .meta > span {
+  flex: 1;
 }

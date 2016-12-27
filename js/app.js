@@ -76,6 +76,13 @@ Vue.component('paper', {
   }
 })
 
+var gyms = [
+  { id: 'ts', name: 'Power Up TS' },
+  { id: 'centro', name: 'Power Up Centro' },
+  { id: 'rox', name: 'Power Up ROX' },
+  { id: 'ccm', name: 'Climb Central Manila' }
+]
+
 var gradings = {
   freeClimb: [
     {
@@ -124,7 +131,10 @@ var Submit = {
     allowNext: function () {
       switch (this.step) {
         case 'selectRouteType':
-          return this.routeGym && this.routeType
+          return this.routeGym &&
+            this.routeType &&
+            this.routeGrading &&
+            this.routeGrade
         case 'editPhoto':
           return this.routePhoto
         case 'submitRoute':
@@ -134,12 +144,7 @@ var Submit = {
       }
     },
     gymChoices: function () {
-      return [
-        { id: 'ts', name: 'Power Up Tandang Sora' },
-        { id: 'centro', name: 'Power Up Centro Atletico' },
-        { id: 'rox', name: 'Power Up ROX' },
-        { id: 'ccm', name: 'Climb Central Manila' }
-      ]
+      return gyms
     },
     climbType: function () {
       return this.routeType === 'boulder'
@@ -163,14 +168,18 @@ var Submit = {
       }
     }
   },
+  watch: {
+    user: function () {
+      if (this.user.uid) {
+        this.routeKey = database.ref('routes/' + this.user.uid).push().key
+      }
+    }
+  },
   methods: {
     uploadPhoto: function (e) {
-      this.routeKey = database.ref('routes/' + this.user.uid).push().key
-
       var file = e.target.files[0]
       var routeImages = storage.ref('routeImages/' + file.name)
       var uploadTask = routeImages.put(file)
-      var self = this
       uploadTask.on(
         firebase.storage.TaskEvent.STATE_CHANGED,
         function (snapshot) {
@@ -179,30 +188,29 @@ var Submit = {
         function (error) {
           console.error(error)
         },
-        function (snapshot) {
-          self.routePhoto = uploadTask.snapshot.downloadURL
-          self.step = 'editPhoto'
-        })
+        this.setPhoto.bind(this, 'submitRoute', uploadTask))
+    },
+    setPhoto: function (nextStep, uploadTask) {
+      this.routePhoto = uploadTask.snapshot.downloadURL
+      this.step = nextStep
     },
     savePhoto: function () {
+      // NOTE: Skipped until markings get better
       // TODO: Check if there were changes made to avoid re-uploading
-      var self = this
-      this.$refs.canvas.$el.toBlob(function (blob) {
-        var editedImages = storage.ref('editedImages/' + self.routeKey + '.png')
-        var uploadTask = editedImages.put(blob)
-        uploadTask.on(
-          firebase.storage.TaskEvent.STATE_CHANGED,
-          function (snapshot) {
-            console.log('progress', snapshot.bytesTransferred / snapshot.totalBytes * 100)
-          },
-          function (error) {
-            console.error(error)
-          },
-          function (snapshot) {
-            self.routePhoto = uploadTask.snapshot.downloadURL
-            self.step = 'submitRoute'
-          })
-      })
+      this.$refs.canvas.$el.toBlob(this.uploadCanvas)
+    },
+    uploadCanvas: function (blob) {
+      var editedImages = storage.ref('editedImages/' + this.routeKey + '.png')
+      var uploadTask = editedImages.put(blob)
+      uploadTask.on(
+        firebase.storage.TaskEvent.STATE_CHANGED,
+        function (snapshot) {
+          console.log('progress', snapshot.bytesTransferred / snapshot.totalBytes * 100)
+        },
+        function (error) {
+          console.error(error)
+        },
+        this.setPhoto.bind(this, 'submitRoute', uploadTask))
     },
     submitRoute () {
       var routeData = {
@@ -215,7 +223,7 @@ var Submit = {
         name: this.routeName,
         description: this.routeDescription,
         submittedAt: firebase.database.ServerValue.TIMESTAMP,
-        user: {
+        submittedBy: {
           uid: this.user.uid,
           displayName: this.user.displayName,
           photoURL: this.user.photoURL
@@ -224,7 +232,26 @@ var Submit = {
       var updates = {}
       updates['userRoutes/' + this.user.uid + '/' + this.routeKey] = routeData
       updates['routes/' + this.routeKey] = routeData
-      database.ref().update(updates)
+      database.ref().update(updates).then(this.gotoRoute)
+    },
+    gotoRoute () {
+      this.$router.push('routes/' + this.routeKey)
+    }
+  }
+}
+
+var Route = {
+  template: '#route',
+  props: ['user'],
+  created: function () {
+    this.$bindAsObject('route', database.ref('routes/' + this.$route.params.key))
+  },
+  computed: {
+    gymName: function () {
+      var id = this.route.gym
+      return gyms.filter(function (gym) {
+        return gym.id === id
+      })[0].name
     }
   }
 }
@@ -232,7 +259,8 @@ var Submit = {
 function initApp () {
   var routes = [
     { path: '/', component: Index },
-    { path: '/submit', component: Submit }
+    { path: '/submit', component: Submit },
+    { path: '/routes/:key', component: Route }
   ]
   var router = new VueRouter({ mode: 'history', routes: routes })
 

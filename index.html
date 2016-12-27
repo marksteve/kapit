@@ -2,7 +2,7 @@
 
 <head>
   <title>Kapit</title>
-  <link rel="stylesheet" href="./css/app.css">
+  <link rel="stylesheet" href="/css/app.css">
 
 <body>
   <main id="app">
@@ -26,12 +26,13 @@
       <h2>All routes</h2>
       <router-link v-if="user" class="btn" to="/submit">Submit a route</router-link>
       <ul class="routes" v-if="routes">
-        <li class="route" v-for="route in routes">
+        <li v-for="route in routes">
           <span :class="['gym', route.gym]">{{ route.gym }}</span>
-          <router-link class="name" :to="route['.key']">
+          <router-link class="name" :to="'routes/' + route['.key']">
             {{ route.name || 'Route by ' + route.setter }}
           </router-link>
           <span class="grade">{{ route.grade }}</span>
+          <img class="type" :src="'/images/' + route.type + '.svg'">
         </li>
       </ul>
     </div>
@@ -92,6 +93,7 @@
         </p>
       </div>
       <div v-else-if="step === 'submitRoute'">
+        <p class="photo"><img :src="routePhoto"></p>
         <p>
           Setter
           <input v-model="routeSetter" type="text">
@@ -111,6 +113,30 @@
     </div>
   </script>
 
+  <script id="route" type="text/x-template">
+    <div v-if="route['.key']" class="route">
+      <div class="name">
+        <h2>
+          <small>{{ gymName }}</small><br>
+          {{ route.name || 'Route by ' + route.setter }}
+        </h2>
+        <span class="grade">{{ route.grade }}</span>
+        <img class="type" :src="'/images/' + route.type + '.svg'">
+      </div>
+      <p v-if="route.name">
+        Set by <strong>{{ route.setter }}</strong>
+      </p>
+      <p class="photo"><img :src="route.photo"></p>
+      <p v-if="route.description">{{ route.description }}</p>
+      <p class="submission">
+        Submitted by <strong>{{ route.submittedBy.displayName }}</strong>
+      </p>
+    </div>
+    <div v-else>
+      <h2>Warming up&hellip;</h2>
+    </div>
+  </script>
+
   <script src="//www.gstatic.com/firebasejs/3.6.4/firebase-app.js"></script>
   <script src="//www.gstatic.com/firebasejs/3.6.4/firebase-auth.js"></script>
   <script src="//www.gstatic.com/firebasejs/3.6.4/firebase-database.js"></script>
@@ -118,6 +144,6 @@
   <script src="//unpkg.com/vue/dist/vue.js"></script>
   <script src="//unpkg.com/vue-router/dist/vue-router.js"></script>
   <script src="//unpkg.com/vuefire/dist/vuefire.js"></script>
-  <script src="./js/paper-full.js"></script>
-  <script src="./js/app.js"></script>
+  <script src="/js/paper-full.js"></script>
+  <script src="/js/app.js"></script>
 
