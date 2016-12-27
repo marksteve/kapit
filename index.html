@@ -83,7 +83,8 @@
         <p class="upload">
           <label>
             <input type="file" :disabled="!allowNext" @change="uploadPhoto">
-            <span>Upload route photo</span>
+            <span v-if="routePhotoUploading">Uploading&hellip; {{ routePhotoProgress }}%</span>
+            <span v-else>Upload route photo</span>
           </label>
         </p>
       </div>
