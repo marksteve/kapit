@@ -1,7 +1,8 @@
 body { margin: 0; }
 
-body, input, select, textarea, button {
-  font: 24px/1.5 sans-serif;
+body, input, select, textarea, button { font: 24px/1.5 sans-serif; }
+@media (max-width: 320px) {
+  body, input, select, textarea, button { font: 16px/1.5 sans-serif; }
 }
 
 h1, h2, h3, h4, p, canvas { margin: 0 0 1.5rem; }
@@ -103,9 +104,15 @@ h1 > a {
 /* Submit */
 
 .user {
+  display: flex;
+  align-items: center;
   background: lemonchiffon;
   margin-bottom: 1.5rem;
   padding: 0.375em;
+}
+.user > .avatar {
+  margin-right: 0.375em;
+  flex: none;
 }
 
 .avatar {

@@ -2,12 +2,13 @@
 
 <head>
   <title>Kapit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/css/app.css">
 
 <body>
   <main id="app">
     <h1><router-link to="/">Kapit</router-link></h1>
-    <p>Indoor Climbing Routes Library</p>
+    <p>Gym Climbing Routes Library</p>
     <div v-if="user" class="user">
       <div class="avatar"><img :src="user.photoURL"></div>
       <small>
