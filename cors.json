@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["http://localhost:9968", "https://kapit-f853c.firebaseapp.com", "https://kapit.marksteve.com"],
+    "origin": ["http://localhost:5000", "https://kapit-f853c.firebaseapp.com", "https://kapit.marksteve.com"],
     "method": ["GET"],
     "maxAgeSeconds": 3600
   }

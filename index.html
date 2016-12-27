@@ -29,7 +29,7 @@
         <li class="route" v-for="route in routes">
           <span :class="['gym', route.gym]">{{ route.gym }}</span>
           <router-link class="name" :to="route['.key']">
-            {{ route.name }}
+            {{ route.name || 'Route by ' + route.setter }}
           </router-link>
           <span class="grade">{{ route.grade }}</span>
         </li>
@@ -77,7 +77,7 @@
         </p>
         <p class="upload">
           <label>
-            <input type="file" :disabled="!routeType" @change="uploadPhoto">
+            <input type="file" :disabled="!allowNext" @change="uploadPhoto">
             <span>Upload route photo</span>
           </label>
         </p>
@@ -87,9 +87,15 @@
           <small>You can optionally make markings on the route photo to identify holds and features.</small>
         </p>
         <paper :url="routePhoto" ref="canvas"></paper>
-        <p><button @click="savePhoto">Save photo</button></p>
+        <p>
+          <button :disabled="!allowNext" @click="savePhoto">Save photo</button>
+        </p>
       </div>
       <div v-else-if="step === 'submitRoute'">
+        <p>
+          Setter
+          <input v-model="routeSetter" type="text">
+        </p>
         <p>
           Name (optional)
           <input v-model="routeName" type="text">
@@ -98,7 +104,9 @@
           Description (optional)
           <textarea v-model="routeDescription" rows="5"></textarea>
         </p>
-        <p><button @click="submitRoute">Submit route</button></p>
+        <p>
+          <button :disabled="!allowNext" @click="submitRoute">Submit route</button>
+        </p>
       </div>
     </div>
   </script>

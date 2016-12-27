@@ -115,11 +115,24 @@ var Submit = {
       routeGrading: null,
       routeGrade: null,
       routePhoto: null,
+      routeSetter: null,
       routeName: null,
       routeDescription: null
     }
   },
   computed: {
+    allowNext: function () {
+      switch (this.step) {
+        case 'selectRouteType':
+          return this.routeGym && this.routeType
+        case 'editPhoto':
+          return this.routePhoto
+        case 'submitRoute':
+          return this.routeSetter && this.routeSetter.length
+        default:
+          return false
+      }
+    },
     gymChoices: function () {
       return [
         { id: 'ts', name: 'Power Up Tandang Sora' },
@@ -198,6 +211,7 @@ var Submit = {
         grading: this.routeGrading,
         grade: this.routeGrade,
         photo: this.routePhoto,
+        setter: this.routeSetter,
         name: this.routeName,
         description: this.routeDescription,
         submittedAt: firebase.database.ServerValue.TIMESTAMP,
