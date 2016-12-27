@@ -7,7 +7,10 @@
 
 <body>
   <main id="app">
-    <h1><router-link to="/">Kapit</router-link></h1>
+    <h1>
+      <img src="/images/logo.svg">
+      <router-link to="/">Kapit</router-link>
+    </h1>
     <p>Gym Climbing Routes Library</p>
     <div v-if="user" class="user">
       <div class="avatar"><img :src="user.photoURL"></div>
