@@ -137,7 +137,7 @@
         Set by <strong>{{ route.setter }}</strong>
       </p>
       <p class="photo"><img :src="route.photo"></p>
-      <p v-if="route.description">{{ route.description }}</p>
+      <p class="description" v-if="route.description">{{ route.description }}</p>
       <p class="submission">
         Submitted by <strong>{{ route.submittedBy.displayName }}</strong>
       </p>

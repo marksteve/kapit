@@ -178,10 +178,10 @@ canvas { display: block; }
 
 /* Route */
 
-.route > .name,
-.route > .meta {
+.route > .name {
   display: flex;
   align-items: center;
+  margin-bottom: 1.5rem;
 }
 
 .route > .name > h2 {
@@ -195,6 +195,6 @@ canvas { display: block; }
   margin-left: 0.5em;
 }
 
-.route > .meta > span {
-  flex: 1;
+.route > .description {
+  white-space: pre-wrap;
 }
