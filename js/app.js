@@ -135,8 +135,6 @@ var Submit = {
         case 'selectRouteType':
           return this.routeGym &&
             this.routeType &&
-            this.routeGrading &&
-            this.routeGrade &&
             !this.routePhotoUploading
         case 'editPhoto':
           return this.routePhoto
