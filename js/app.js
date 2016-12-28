@@ -169,15 +169,9 @@ var Submit = {
       }
     }
   },
-  watch: {
-    user: function () {
-      if (this.user.uid) {
-        this.routeKey = database.ref('routes/' + this.user.uid).push().key
-      }
-    }
-  },
   methods: {
     uploadPhoto: function (e) {
+      this.routeKey = database.ref('routes/' + this.user.uid).push().key
       var file = e.target.files[0]
       var routeImages = storage.ref('routeImages/' + file.name)
       var uploadTask = routeImages.put(file)
