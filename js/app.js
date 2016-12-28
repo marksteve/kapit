@@ -219,7 +219,7 @@ var Submit = {
         },
         this.setPhoto.bind(this, 'submitRoute', uploadTask))
     },
-    submitRoute () {
+    submitRoute: function () {
       var routeData = {
         gym: this.routeGym,
         type: this.routeType,
@@ -241,7 +241,7 @@ var Submit = {
       updates['routes/' + this.routeKey] = routeData
       database.ref().update(updates).then(this.gotoRoute)
     },
-    gotoRoute () {
+    gotoRoute: function () {
       this.$router.push('routes/' + this.routeKey)
     }
   }
